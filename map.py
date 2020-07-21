@@ -48,7 +48,6 @@ MAPWIDTH = 25
 MAPHEIGHT = 15
 
 #  luo näytön
-
 pygame.init()
 DISPLAY = pygame.display.set_mode((MAPWIDTH * TILESIZE, MAPHEIGHT * TILESIZE))
 
@@ -57,7 +56,6 @@ DISPLAY = pygame.display.set_mode((MAPWIDTH * TILESIZE, MAPHEIGHT * TILESIZE))
 while True:
 
     for event in pygame.event.get():
-
         #  lopettaa ohjelman painaessa x-painiketta
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -68,9 +66,9 @@ while True:
     for row in range(MAPHEIGHT):
         #  vaakarivit
         for column in range(MAPWIDTH):
-            pygame.draw.rect(DISPLAY, tile_colour)
+            pygame.draw.rect(DISPLAY, tile_colour[game_map[row][column]],(column*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
 
-
+    pygame.display.update()
 
 
 
