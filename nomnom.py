@@ -1,4 +1,4 @@
-import arcade
+
 
 
 #  luodaan pelaajan hahmo
