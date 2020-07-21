@@ -19,6 +19,10 @@ MOUNTAIN = (166, 166, 166)
 LIGHT_BROWN = (204, 102, 0)
 DARK_BROWN = (102, 51, 0)
 
+#  yhdistetään palikat ja värit
+
+tile_colour = {W: WATER, G: GRASS, F: FOREST, M: MOUNTAIN, L: LIGHT_BROWN, D: DARK_BROWN}
+
 #  kartta
 
 game_map =[[G,G,G,G,G,G,G,G,F,F,F,F,G,G,G,W,G,G,W,G,G,G,M,M,M],
@@ -64,7 +68,7 @@ while True:
     for row in range(MAPHEIGHT):
         #  vaakarivit
         for column in range(MAPWIDTH):
-            pygame.draw.rect(DISPLAY, TileColour)
+            pygame.draw.rect(DISPLAY, tile_colour)
 
 
 
