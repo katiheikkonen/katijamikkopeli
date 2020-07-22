@@ -1,0 +1,113 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: The Epic Adventure of NomNom
+
+Parameters:
+
+  LatestAmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  ApplicationPort1:
+    Type: Number
+    Default: 3389
+  ApplicationPort2:
+    Type: Number
+    Default: 22
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+    - t2.micro
+  Keypair:
+    Type: String
+    Default: kati-keypair-london
+
+Resources:
+
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: nomnom-adventure
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LatestAmiId
+      KeyName: !Ref Keypair
+      InstanceType: !Ref InstanceTypeParameter
+      SecurityGroupIds:
+        - !Ref InstanceSecurityGroup
+      IamInstanceProfile: !Ref IAMInstanceProfile
+      Tags:
+        - Key: Name
+          Value: NomNomInstance
+        - Key: Owner
+          Value: Kati
+
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SG for EC2
+      GroupName: NomNom-game-SG
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: !Ref ApplicationPort1
+          ToPort: !Ref ApplicationPort1
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: !Ref ApplicationPort2
+          ToPort: !Ref ApplicationPort2
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Owner
+          Value: Kati
+
+  IAMPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: InstanceAccessToNomNomBucket
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Action: "s3:*"
+            Resource: !GetAtt Bucket.Arn
+      Roles:
+        - !Ref IAMRole
+
+  IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: InstanceAccessToNomNomBucket
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+#        Path: /
+#        ManagedPolicyArns:
+#          - !Ref IAMPolicy
+
+  IAMInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      InstanceProfileName: InstanceProfileNameGame
+      Path: "/"
+      Roles:
+        - !Ref IAMRole
+
+
+
+
+
+
+
+
+
+
+
+
+
