@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame import mixer
+from level_1 import game_map
 import time
 
 #  määritetään kartan ruutujen arvo
@@ -19,28 +20,6 @@ tile_colour = {W: pygame.image.load('water.jpg'),
                L: pygame.image.load('drygrass.jpg'),
                D: pygame.image.load('bridge.jpg')}
 
-# kartta, jossa kirjain vastaa 30x30 ruutua, jonka ympäristön määrittää Kijain
-game_map =[[G,G,G,G,G,G,G,G,F,F,F,F,G,G,G,W,G,G,W,G,G,G,M,M,M,W,G,G,G,G,G,G,G,W,W],
-        [W,G,G,G,G,G,G,G,G,F,F,F,G,G,G,W,G,G,W,G,G,G,G,M,M,W,W,G,G,G,G,G,W,W,W],
-        [W,W,G,G,G,G,G,G,F,F,F,F,G,G,G,W,W,G,W,G,G,G,G,M,M,M,G,G,G,G,G,G,G,W,W],
-        [W,W,G,G,G,G,G,F,F,F,F,F,G,G,G,G,W,W,W,G,G,G,G,G,M,W,G,G,G,G,G,G,G,G,W],
-        [W,W,W,G,G,G,G,G,F,F,G,F,G,G,G,G,W,G,G,G,G,G,M,M,M,M,G,G,G,G,G,G,G,W,W],
-        [W,W,W,G,G,G,G,G,F,F,F,F,G,G,G,G,D,G,G,G,G,G,G,M,M,G,G,G,G,G,G,G,G,G,G],
-        [W,W,W,G,G,G,G,G,G,F,G,F,G,G,G,G,W,G,G,G,G,G,G,G,M,G,G,G,G,G,G,G,G,F,G],
-        [W,W,W,W,W,G,G,G,G,G,F,F,G,G,G,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,G,G,F,F,G],
-        [W,W,W,W,W,W,G,G,G,G,G,F,G,G,W,W,G,G,G,G,G,G,F,F,G,G,G,G,G,G,G,F,F,G,G],
-        [W,W,W,W,W,G,G,G,F,G,G,G,G,W,W,G,G,G,G,G,G,G,G,F,F,G,G,G,G,G,G,G,F,F,G],
-        [F,W,W,W,W,W,W,W,W,W,W,D,W,W,G,G,G,G,W,G,G,G,F,F,F,G,G,G,G,G,F,F,F,F,G],
-        [M,F,W,W,W,W,W,W,W,W,G,G,G,D,G,G,W,W,W,G,G,G,G,G,F,G,G,G,G,F,F,F,G,G,G],
-        [M,M,M,F,W,W,W,W,G,G,G,G,G,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,G,G,G,F,G,G],
-        [M,F,M,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,W,G,G,G,G,G,F,G,G,G,G,G,G,G,F,F,G],
-        [M,M,W,W,W,W,W,W,G,G,G,G,F,F,G,G,G,G,W,W,G,G,F,M,M,M,G,G,G,G,G,G,G,G,G],
-        [M,W,W,W,W,W,W,W,G,G,G,G,G,F,G,G,G,G,W,G,G,G,F,M,M,F,G,G,G,G,G,G,G,W,W],
-        [W,W,W,W,W,W,W,F,G,G,G,G,G,G,G,G,G,G,D,G,G,F,F,M,M,F,G,G,G,G,W,D,W,W,W],
-        [W,W,W,W,W,W,F,F,F,G,G,G,G,F,F,G,G,W,W,G,G,F,F,F,M,F,G,G,W,W,W,G,G,W,W],
-        [W,W,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,W,W,G,G,F,M,M,W,W,D,W,G,G,G,G,G,W],
-        [W,W,W,W,W,W,G,G,G,G,G,G,F,F,G,G,G,G,W,G,G,G,G,M,M,M,G,G,G,G,G,G,G,G,G]]
-
 # määritetään kartan koko
 TILESIZE = 30
 MAPWIDTH = 35
@@ -54,82 +33,20 @@ DISPLAY = pygame.display.set_mode((MAPWIDTH * TILESIZE, MAPHEIGHT * TILESIZE))
 
 #Annetaan pelille nimi
 pygame.display.set_caption('The Epic Adventure of NomNom')
-
-#NomNom, pelihahmo ja siihen liittyvät funktiot
-#NomNomin graafinen presentaatio kartalla
-
 #alussa pelaajan kuva on:
 playerImg = pygame.image.load('sheep.png')
 #jos kokemus yli XX xp niin pelaajan graafinen kuva on:
 playerImg2 = pygame.image.load('sheep2.png')
-
-
-
-
-# WOLF
-
 #Suden kuva:
 wolfImg = pygame.image.load('wolf.png')
-
-# Susien graafisen presentaation koordinaatit (pikseleitä)
-wolf1X = 270
-wolf1Y = 270
-
-wolf2X = 270
-wolf2Y = 270
-wolf3X = 270
-wolf3Y = 270
-wolf4X = 270
-wolf4Y = 270
-wolf5X = 270
-wolf5Y = 270
-wolf6X = 270
-wolf6Y = 270
-
-#Suden sijainti kartalla/ruudukossa
-wolf1_pos_on_map_row = 9 #Y akseli
-wolf1_pos_on_map_column = 9 #X akseli
-
-wolf2_pos_on_map_row = 0 #Y akseli
-wolf2_pos_on_map_column = 0 #X akseli
-wolf3_pos_on_map_row = 0 #Y akseli
-wolf3_pos_on_map_column = 0 #X akseli
-wolf4_pos_on_map_row = 0 #Y akseli
-wolf4_pos_on_map_column = 0 #X akseli
-wolf5_pos_on_map_row = 0 #Y akseli
-wolf5_pos_on_map_column = 0 #X akseli
-wolf6_pos_on_map_row = 0 #Y akseli
-wolf6_pos_on_map_column = 0 #X akseli
-
-#Funktion tehtävä on näyttää suden graafinen objekti kartalla
-def wolf_location(x,y):
-    DISPLAY.blit(wolfImg, (x, y))
-
-#Funktion tehtävä on liikuttaa suden graafista objektia sekä muuttaa suden sijaintia kartalla/ruudukossa
-def move_wolf1(y_pos, y_coor):
-    if y_pos == 9:
-        # wolf1_pos_on_map_row += 1
-        # wolf1X += 30
-    # elif y_pos == 10:
-    #     y_pos += 1
-    #     y_coor += 30
-
-move_left = 30
-move_right = -30
-
-# pygame.time.set_timer(USEREVENT, 1000)
-
 #Tausta musiikki...
 mixer.music.load("happy_clappy.wav")
 #...joka soi loopissa
 mixer.music.play(-1)
 
-#Nomnomin statistiikka esitettynä yläkulmassa:
+#Fontteja:
 font = pygame.font.SysFont("comicsansms", 22)
-textX = 10
-textY = 550
-
-font1 = pygame.font.SysFont("comicsansms", 30)
+font1 = pygame.font.SysFont("comicsansms", 40)
 
 mainClock = pygame.time.Clock()
 
@@ -143,22 +60,27 @@ click = False
 #Päämenu
 def main_menu():
     while True:
+        #Päämenun tausta
         DISPLAY.fill((0,0,0))
-        draw_text("The Epic Adventures of NomNom", font1, (255,255,255), DISPLAY, 400, 50)
+        draw_text("The Epic Adventures of NomNom", font1, (255,255,255), DISPLAY, 200, 50)
         mx, my = pygame.mouse.get_pos()
-        play_game_button = pygame.Rect(50,100,200,50)
-        end_game_button = pygame.Rect(200, 250, 200, 50)
+        play_game_button = pygame.Rect(50,500,200,50)
+        draw_text("NEW GAME", font1, (255,255,255), DISPLAY, 40, 450)
+        end_game_button = pygame.Rect(800, 500, 200, 50)
+        draw_text("QUIT", font1, (255,255,255), DISPLAY, 840, 450)
 
+        #Jos klikkat "NEW GAME" nappulaa, aloita funktio "Peli"
         if play_game_button.collidepoint((mx, my)):
             if click:
                 game()
+        #Jos klikkaat "QUIT" nappulaa, sulje peli
         if end_game_button.collidepoint((mx, my)):
             if click:
                 pygame.quit()
                 sys.exit()
 
-        pygame.draw.rect(DISPLAY,(255,0,0), play_game_button)
-        pygame.draw.rect(DISPLAY, (255, 0, 0), end_game_button)
+        pygame.draw.rect(DISPLAY,(45, 175, 110), play_game_button)
+        pygame.draw.rect(DISPLAY, (45, 175, 110), end_game_button)
 
         click = False
         for event in pygame.event.get():
@@ -173,9 +95,22 @@ def main_menu():
         pygame.display.update()
         mainClock.tick(60)
 
+def game_over():
+    DISPLAY.fill((0,0,0))
+    draw_text("GAME OVER", font1, (255, 255, 255), DISPLAY, 400, 310)
+    pygame.display.update()
+    pygame.time.wait(1500)
+
+def win():
+    DISPLAY.fill((240, 240, 240))
+    draw_text("Look on my Works, ye Mighty, and despair!", font1, (20, 20, 20), DISPLAY, 120, 310)
+    draw_text("YOU WIN", font1, (20, 20, 20), DISPLAY, 400, 200)
+    pygame.display.update()
+    pygame.time.wait(1500)
+    exit() #sulkee vain koko pelin
 
 
-#Peli looppi
+#Peli looppi/ GAME funktio
 def game():
     game_on = True
     # Graafisen presentaation koordinaatit (pikseleitä)
@@ -192,20 +127,23 @@ def game():
             self.xp = xp
         # Funktion tehtävä on näyttää Nomnomin graafinen objekti kartalla
         def location(x, y):
-            if nomnom.xp < 100:
+            if nomnom.xp < 50:
                 DISPLAY.blit(playerImg, (playerX, playerY))
             else:
                 DISPLAY.blit(playerImg2, (playerX, playerY))
+        def check_for_win(self):
+            if nomnom.xp == 100:
+                win()
+
     #Hahmo
     nomnom = NomNom()
 
     # Nomnomin statistiikka esitettynä alakulmassa:
     def show_stats(x, y):
-        show_hp = font.render('Elinvoima:' + str(nomnom.hp), True, (255, 255, 255))
-        DISPLAY.blit(show_hp, (x, y))
-        show_xp = font.render('Kokemus:' + str(nomnom.xp), True, (255, 255, 255))
-        DISPLAY.blit(show_xp, (x, y + 20))
+        draw_text('Elinvoima:' + str(nomnom.hp), font, (255, 255, 255), DISPLAY, x, y)
+        draw_text('Kokemus:' + str(nomnom.xp), font, (255, 255, 255), DISPLAY, x, y+20)
 
+    #Kun peli on käynnissä tee tätä looppia
     while game_on:
 
         for event in pygame.event.get():
@@ -236,6 +174,7 @@ def game():
                         nomnom.hp -= 1
                         # tarkistetaan onko Nomnom hengissä. Jos ei, peli loppuu
                         if nomnom.hp == 0:
+                            game_over()
                             return game_on == False
 
                     #jos edessä on silta, ei tapahdu mitään erityistä
@@ -251,8 +190,6 @@ def game():
                         # jos nomnom kestävyys on täysi lisää 1 piste kokemukseen...
                         if nomnom.hp == 5:
                             nomnom.xp += 1
-                            print(nomnom.xp)
-                            # if nomnom.xp == 20: NomNom kehittyy
                         # muutoin lisää 1 piste kestävyyteen
                         else:
                             nomnom.hp += 1
@@ -272,6 +209,7 @@ def game():
                         playerX = playerX + 30
                         pos_on_map_column = pos_on_map_column + 1
                         if nomnom.hp == 0:
+                            game_over()
                             return game_on == False
 
                     elif game_map[pos_on_map_row][pos_on_map_column + 1] == 5:
@@ -286,8 +224,6 @@ def game():
                         # jos nomnom kestävyys on täysi lisää 1 piste kokemukseen...
                         if nomnom.hp == 5:
                             nomnom.xp += 1
-                            print(nomnom.xp)
-                            # if nomnom.xp == 20: NomNom kehittyy
                         # muutoin lisää 1 piste kestävyyteen
                         else:
                             nomnom.hp += 1
@@ -303,6 +239,7 @@ def game():
                         playerY = playerY - 30
                         pos_on_map_row = pos_on_map_row - 1
                         if nomnom.hp == 0:
+                            game_over()
                             return game_on == False
 
                     elif game_map[pos_on_map_row - 1][pos_on_map_column] == 5:
@@ -317,16 +254,12 @@ def game():
                         # jos nomnom kestävyys on täysi lisää 1 piste kokemukseen...
                         if nomnom.hp == 5:
                             nomnom.xp += 1
-                            print(nomnom.xp)
-                            # if nomnom.xp == 20: NomNom kehittyy
                         # muutoin lisää 1 piste kestävyyteen
                         else:
                             nomnom.hp += 1
 
 
                 if event.key == pygame.K_DOWN:
-            # -------------------------------------------------------------------------------------------------
-            # TÄMÄ OSIA OMAKSI FUNKTIOKSI (def move_down())
                     if pos_on_map_row == 19:
                         continue
                     elif game_map[pos_on_map_row + 1][pos_on_map_column] == 0 or game_map[pos_on_map_row + 1][pos_on_map_column] == 2 or game_map[pos_on_map_row + 1][pos_on_map_column] == 3:
@@ -336,6 +269,7 @@ def game():
                         playerY = playerY + 30
                         pos_on_map_row = pos_on_map_row + 1
                         if nomnom.hp == 0:
+                            game_over()
                             return game_on == False
 
                     elif game_map[pos_on_map_row + 1][pos_on_map_column] == 5:
@@ -355,15 +289,6 @@ def game():
                         else:
                             nomnom.hp += 1
 
-    wolf_location(wolf1X, wolf1Y)
-
-    move_wolf1(wolf1_pos_on_map_row, wolf1Y)
-
-    wolf_location(wolf1X, wolf1Y)
-
-    #Näytä elinvoima ja kokemus
-    show_stats(textX, textY)
-
         #  piirtää kartan
         #  pystyrivit
         for row in range(MAPHEIGHT):
@@ -372,10 +297,11 @@ def game():
                 DISPLAY.blit(tile_colour[game_map[row][column]], (column * TILESIZE, row * TILESIZE))
         #DISPLAY.blit(playerImg, (playerX, playerY))
         nomnom.location((playerX,playerY))
-
+        if nomnom.check_for_win() == True:
+            return game_on==False
 
         #Näytä elinvoima ja kokemus
-        show_stats(textX, textY)
+        show_stats(10, 550)
 
         pygame.display.update()
 
