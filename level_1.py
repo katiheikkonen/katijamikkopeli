@@ -1,3 +1,6 @@
+
+
+
 W = 0 #WATER
 G = 1 #GRASS
 F = 2 #FOREST
@@ -26,3 +29,5 @@ game_map =[[G,G,G,G,G,G,G,G,F,F,F,F,G,G,G,W,G,G,W,G,G,G,M,M,M,W,G,G,G,G,G,G,G,W,
         [W,W,W,W,W,W,F,F,F,G,G,G,G,F,F,G,G,W,W,G,G,F,F,F,M,F,G,G,W,W,W,G,G,W,W],
         [W,W,W,W,W,W,W,W,G,G,G,G,G,G,G,G,G,G,W,W,G,G,F,M,M,W,W,D,W,G,G,G,G,G,W],
         [W,W,W,W,W,W,G,G,G,G,G,G,F,F,G,G,G,G,W,G,G,G,G,M,M,M,G,G,G,G,G,G,G,G,G]]
+
+
