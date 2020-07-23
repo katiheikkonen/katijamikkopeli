@@ -1,6 +1,7 @@
 import pygame
 import sys
 from pygame import mixer
+import time
 
 #  määritetään kartan ruutujen arvo
 W = 0 #WATER
@@ -82,6 +83,59 @@ class NomNom:
             DISPLAY.blit(playerImg2, (playerX, playerY))
 
 nomnom=NomNom()
+
+# WOLF
+
+#Suden kuva:
+wolfImg = pygame.image.load('wolf.png')
+
+# Susien graafisen presentaation koordinaatit (pikseleitä)
+wolf1X = 270
+wolf1Y = 270
+
+wolf2X = 270
+wolf2Y = 270
+wolf3X = 270
+wolf3Y = 270
+wolf4X = 270
+wolf4Y = 270
+wolf5X = 270
+wolf5Y = 270
+wolf6X = 270
+wolf6Y = 270
+
+#Suden sijainti kartalla/ruudukossa
+wolf1_pos_on_map_row = 9 #Y akseli
+wolf1_pos_on_map_column = 9 #X akseli
+
+wolf2_pos_on_map_row = 0 #Y akseli
+wolf2_pos_on_map_column = 0 #X akseli
+wolf3_pos_on_map_row = 0 #Y akseli
+wolf3_pos_on_map_column = 0 #X akseli
+wolf4_pos_on_map_row = 0 #Y akseli
+wolf4_pos_on_map_column = 0 #X akseli
+wolf5_pos_on_map_row = 0 #Y akseli
+wolf5_pos_on_map_column = 0 #X akseli
+wolf6_pos_on_map_row = 0 #Y akseli
+wolf6_pos_on_map_column = 0 #X akseli
+
+#Funktion tehtävä on näyttää suden graafinen objekti kartalla
+def wolf_location(x,y):
+    DISPLAY.blit(wolfImg, (x, y))
+
+#Funktion tehtävä on liikuttaa suden graafista objektia sekä muuttaa suden sijaintia kartalla/ruudukossa
+def move_wolf1(y_pos, y_coor):
+    if y_pos == 9:
+        # wolf1_pos_on_map_row += 1
+        # wolf1X += 30
+    # elif y_pos == 10:
+    #     y_pos += 1
+    #     y_coor += 30
+
+move_left = 30
+move_right = -30
+
+# pygame.time.set_timer(USEREVENT, 1000)
 
 #Tausta musiikki...
 mixer.music.load("happy_clappy.wav")
@@ -256,6 +310,13 @@ while True:
             DISPLAY.blit(tile_colour[game_map[row][column]], (column * TILESIZE, row * TILESIZE))
     #DISPLAY.blit(playerImg, (playerX, playerY))
     nomnom.location((playerX,playerY))
+
+
+    wolf_location(wolf1X, wolf1Y)
+
+    move_wolf1(wolf1_pos_on_map_row, wolf1Y)
+
+    wolf_location(wolf1X, wolf1Y)
 
     #Näytä elinvoima ja kokemus
     show_stats(textX, textY)
