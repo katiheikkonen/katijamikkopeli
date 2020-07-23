@@ -1,12 +1,12 @@
-AWSTemplateFormatVersion: 2010-09-09
-Description: The Epic Adventure of NomNom
+WSTemplateFormatVersion: 2010-09-09
+Description: The Adventure of NomNom
 
 Parameters:
 
-  AmiId:
+  WindowsAmiId:
     Type: String
     Default: ami-0c80f4021417f8488
-  ApplicationPort1:
+  ApplicationPort1: # RDP-portti, joka tarjoaa graafisen käyttöliittymän toiseen koneeseen etäyhteydellä
     Type: Number
     Default: 3389
   ApplicationPort2:
@@ -23,26 +23,28 @@ Parameters:
 
 Resources:
 
-  Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: nomnom-adventure
-
   Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !Ref AmiId
+      ImageId: !Ref WindowsAmiId
       KeyName: !Ref Keypair
       InstanceType: !Ref InstanceTypeParameter
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       IamInstanceProfile: !Ref IAMInstanceProfile
+      UserData:
+        Fn::Base64:
+          Fn::Join:
+           - aws s3 cp s3://nomnom-adventure/ --recursive
+
       Tags:
         - Key: Name
           Value: NomNomInstance
         - Key: Owner
           Value: Kati
 
+
+#  EC2 Security Group, joka sallii portit 3389 ja 22 kaikista IP-osoitteista
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -61,6 +63,7 @@ Resources:
         - Key: Owner
           Value: Kati
 
+#  IAM Policy, joka sallii pääsyn S3 bucketiin, jossa peli sijaitsee
   IAMPolicy:
     Type: AWS::IAM::Policy
     Properties:
@@ -69,11 +72,12 @@ Resources:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
-            Action: "s3:*"
-            Resource: !GetAtt Bucket.Arn
+            Action: s3:*
+            Resource: arn:aws:s3:::nomnom-adventure/*
       Roles:
-        - !Ref IAMRole
+        - !Ref IAMRole #  Yhdistää policyn rooliin
 
+#  IAM rooli, johon policy on yhdistetty
   IAMRole:
     Type: AWS::IAM::Role
     Properties:
@@ -88,14 +92,13 @@ Resources:
             Action:
               - 'sts:AssumeRole'
 
-  IAMInstanceProfile:
+  IAMInstanceProfile: # säilyttää IAM roolia, joka syötetään EC2 instanssille sen köynnistyessä
+
     Type: AWS::IAM::InstanceProfile
     Properties:
-      InstanceProfileName: InstanceProfileNameGame
-      Path: "/"
+      InstanceProfileName: InstanceProfileNomNom
       Roles:
         - !Ref IAMRole
-
 
 
 
