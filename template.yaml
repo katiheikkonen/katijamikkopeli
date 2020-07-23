@@ -1,4 +1,4 @@
-WSTemplateFormatVersion: 2010-09-09
+AWSTemplateFormatVersion: 2010-09-09
 Description: The Adventure of NomNom
 
 Parameters:
@@ -32,19 +32,14 @@ Resources:
       SecurityGroupIds:
         - !Ref InstanceSecurityGroup
       IamInstanceProfile: !Ref IAMInstanceProfile
-      UserData:
-        Fn::Base64:
-          Fn::Join:
-           - aws s3 cp s3://nomnom-adventure/ --recursive
-
       Tags:
         - Key: Name
           Value: NomNomInstance
         - Key: Owner
           Value: Kati
 
-
 #  EC2 Security Group, joka sallii portit 3389 ja 22 kaikista IP-osoitteista
+
   InstanceSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -72,8 +67,8 @@ Resources:
         Version: 2012-10-17
         Statement:
           - Effect: Allow
-            Action: s3:*
-            Resource: arn:aws:s3:::nomnom-adventure/*
+            Action: 's3:*'
+            Resource: 'arn:aws:s3:::nomnom-adventure'
       Roles:
         - !Ref IAMRole #  Yhdistää policyn rooliin
 
