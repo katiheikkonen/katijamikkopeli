@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame import mixer
 from level_1 import game_map
+import math
 import time
 
 #  määritetään kartan ruutujen arvo
@@ -39,10 +40,16 @@ playerImg = pygame.image.load('sheep.png')
 playerImg2 = pygame.image.load('sheep2.png')
 #Suden kuva:
 wolfImg = pygame.image.load('wolf.png')
+#Kotkan kuva
+eagleImg =pygame.image.load('eagle.png')
+#Taustakuva
+background = pygame.image.load('background.png')
 #Tausta musiikki...
 mixer.music.load("happy_clappy.wav")
 #...joka soi loopissa
 mixer.music.play(-1)
+#Seinään / mereen, vuoreen yms. törmäys ääni:
+boing = mixer.Sound("boing.wav")
 
 #Fontteja:
 font = pygame.font.SysFont("comicsansms", 22)
@@ -56,12 +63,26 @@ def draw_text(text, font, color, surface, x,y):
     textrect.topleft = (x,y)
     surface.blit(textobj, textrect)
 
+#Susi 1
+def wolf1(x,y):
+    DISPLAY.blit(wolfImg, (x, y))
+def wolf2(x,y):
+    DISPLAY.blit(wolfImg, (x, y))
+def wolf3(x,y):
+    DISPLAY.blit(wolfImg, (x, y))
+def wolf4(x,y):
+    DISPLAY.blit(wolfImg, (x, y))
+def eagle(x,y):
+    DISPLAY.blit(eagleImg, (x, y))
+
 click = False
 #Päämenu
 def main_menu():
     while True:
         #Päämenun tausta
-        DISPLAY.fill((0,0,0))
+        DISPLAY.fill((0, 0, 0))
+        #Taustakuva
+        DISPLAY.blit(background,(0,0))
         draw_text("The Epic Adventures of NomNom", font1, (255,255,255), DISPLAY, 200, 50)
         mx, my = pygame.mouse.get_pos()
         play_game_button = pygame.Rect(50,500,200,50)
@@ -120,6 +141,8 @@ def game():
     pos_on_map_row = 0  # Y akseli
     pos_on_map_column = 0  # X akseli
 
+    import wolfs
+
     # NomNom luokka,
     class NomNom:
         def __init__(self, hp=5, xp=0):
@@ -135,8 +158,17 @@ def game():
             if nomnom.xp == 100:
                 win()
 
+    # Tarkistetaan osuuko pelaaja suteen:
+    def osuuko(wolf1X, wolf1Y, playerX, playerY):
+        distance = math.sqrt((math.pow(wolfs.wolf1X - playerX, 2)) + (math.pow(wolfs.wolf1Y - playerY, 2)))
+        if distance < 20:
+            return True
+        else:
+            return False
+
     #Hahmo
     nomnom = NomNom()
+
 
     # Nomnomin statistiikka esitettynä alakulmassa:
     def show_stats(x, y):
@@ -163,6 +195,7 @@ def game():
                     #tarkistetaan voiko kyseiseen suuntaan liikkua
                     if game_map[pos_on_map_row][pos_on_map_column-1] == 0 or game_map[pos_on_map_row][
                         pos_on_map_column-1] == 2 or game_map[pos_on_map_row][pos_on_map_column-1] == 3 or pos_on_map_column==0:
+                        boing.play()
                         continue
 
                     # Jos suunnassa on ruskeaa maata, kestävyys alenee 1 pisteen verran:
@@ -200,8 +233,10 @@ def game():
             # TÄMÄ OSIA OMAKSI FUNKTIOKSI (def move_right())
 
                     if pos_on_map_column==34:
+                        boing.play()
                         continue
                     elif game_map[pos_on_map_row][pos_on_map_column + 1] == 0 or game_map[pos_on_map_row][pos_on_map_column + 1] == 2 or game_map[pos_on_map_row][pos_on_map_column + 1] == 3:
+                        boing.play()
                         continue
                         # Jos suunnassa on ruskeaa maata, kestävyys alenee 1 pisteen verran:
                     elif game_map[pos_on_map_row][pos_on_map_column + 1] == 4:
@@ -232,6 +267,7 @@ def game():
             # -------------------------------------------------------------------------------------------------
             # TÄMÄ OSIA OMAKSI FUNKTIOKSI (def move_up())
                     if game_map[pos_on_map_row-1][pos_on_map_column] == 0 or game_map[pos_on_map_row-1][pos_on_map_column] == 2 or game_map[pos_on_map_row-1][pos_on_map_column] == 3 or pos_on_map_row==0:
+                        boing.play()
                         continue
 
                     elif game_map[pos_on_map_row - 1][pos_on_map_column] == 4:
@@ -261,8 +297,10 @@ def game():
 
                 if event.key == pygame.K_DOWN:
                     if pos_on_map_row == 19:
+                        boing.play()
                         continue
                     elif game_map[pos_on_map_row + 1][pos_on_map_column] == 0 or game_map[pos_on_map_row + 1][pos_on_map_column] == 2 or game_map[pos_on_map_row + 1][pos_on_map_column] == 3:
+                        boing.play()
                         continue
                     elif game_map[pos_on_map_row + 1][pos_on_map_column] == 4:
                         nomnom.hp -= 1
@@ -300,8 +338,80 @@ def game():
         if nomnom.check_for_win() == True:
             return game_on==False
 
+        #Susien liikkeet
+        #Wolf1
+        wolfs.wolf1X += wolfs.wolf1X_change
+        if wolfs.wolf1X <= 270.0:
+            wolfs.wolf1X_change += 0.4
+        elif wolfs.wolf1X >= 360.0:
+            wolfs.wolf1X_change -= 0.4
+        wolf1(wolfs.wolf1X,wolfs.wolf1Y)
+
+        #Wolf2
+        wolfs.wolf2X += wolfs.wolf2X_change
+        if wolfs.wolf2X <= 660.0:
+            wolfs.wolf2X_change += 0.8
+        elif wolfs.wolf2X >= 840.0:
+            wolfs.wolf2X_change -= 0.8
+        wolf2(wolfs.wolf2X, wolfs.wolf2Y)
+
+        #Wolf3
+        wolfs.wolf3Y += wolfs.wolf3Y_change
+        if wolfs.wolf3Y <= 120.0:
+            wolfs.wolf3Y_change += 0.8
+        elif wolfs.wolf3Y >= 300.0:
+            wolfs.wolf3Y_change -= 0.8
+        wolf3(wolfs.wolf3X, wolfs.wolf3Y)
+
+        # Wolf4
+        wolfs.wolf4Y += wolfs.wolf4Y_change
+        if wolfs.wolf4Y <= 380.0:
+            wolfs.wolf4Y_change += 0.6
+        elif wolfs.wolf4Y >= 510.0:
+            wolfs.wolf4Y_change -= 0.6
+        wolf4(wolfs.wolf4X, wolfs.wolf4Y)
+
+        #Eagle
+        wolfs.eagleY += wolfs.eagleY_change
+        wolfs.eagleX += wolfs.eagleX_change
+        if wolfs.eagleX <= 20:
+            wolfs.eagleX_change += 2
+            wolfs.eagleY_change += 1.5
+        elif wolfs.eagleX >= 1030:
+            wolfs.eagleX_change -= 2
+            wolfs.eagleY_change -= 1.5
+        elif wolfs.eagleY >= 580:
+            wolfs.eagleX_change -= 1.6
+            wolfs.eagleY_change -= 2
+        elif wolfs.eagleY <= 20:
+            wolfs.eagleX_change += 1.5
+            wolfs.eagleY_change += 2
+        eagle(wolfs.eagleX, wolfs.eagleY)
+
         #Näytä elinvoima ja kokemus
         show_stats(10, 550)
+
+        #Tarkistetaan osuuko pelaaja suteen:
+        osuma1 = osuuko(wolfs.wolf1X, wolfs.wolf1Y, playerX, playerY)
+        if osuma1:
+            game_over()
+            return game_on == False
+        osuma2 = osuuko(wolfs.wolf2X, wolfs.wolf2Y, playerX, playerY)
+        if osuma2:
+            game_over()
+            return game_on == False
+        osuma3 = osuuko(wolfs.wolf3X, wolfs.wolf3Y, playerX, playerY)
+        if osuma3:
+            game_over()
+            return game_on == False
+        osuma4 = osuuko(wolfs.wolf4X, wolfs.wolf4Y, playerX, playerY)
+        if osuma4:
+            game_over()
+            return game_on == False
+        osuma5 = osuuko(wolfs.eagleX, wolfs.eagleY, playerX, playerY)
+        if osuma5:
+            game_over()
+            return game_on == False
 
         pygame.display.update()
 
