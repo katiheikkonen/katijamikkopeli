@@ -3,9 +3,9 @@ Description: The Epic Adventure of NomNom
 
 Parameters:
 
-  LatestAmiId:
-    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
-    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+  AmiId:
+    Type: String
+    Default: ami-0c80f4021417f8488
   ApplicationPort1:
     Type: Number
     Default: 3389
@@ -31,7 +31,7 @@ Resources:
   Instance:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: !Ref LatestAmiId
+      ImageId: !Ref AmiId
       KeyName: !Ref Keypair
       InstanceType: !Ref InstanceTypeParameter
       SecurityGroupIds:
@@ -87,9 +87,6 @@ Resources:
                 - ec2.amazonaws.com
             Action:
               - 'sts:AssumeRole'
-#        Path: /
-#        ManagedPolicyArns:
-#          - !Ref IAMPolicy
 
   IAMInstanceProfile:
     Type: AWS::IAM::InstanceProfile
