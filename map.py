@@ -7,19 +7,16 @@ W = 0 #WATER
 G = 1 #GRASS
 F = 2 #FOREST
 M = 3 #MOUNTAIN
-L = 4 #LIGHT BROWN
-D = 5 #DARK BROWN
+L = 4 #LIGHT BROWN/DRY GRASS
+D = 5 #DARK BROWN/BRIDGE
 
-#  määritetään ruutujen väri
-WATER = (0,0,255)
-GRASS = (124, 252, 0)
-FOREST = (0, 100, 0)
-MOUNTAIN = (166, 166, 166)
-LIGHT_BROWN = (204, 102, 0)
-DARK_BROWN = (102, 51, 0)
-
-#  yhdistetään ruudut ja värit
-tile_colour = {W: WATER, G: GRASS, F: FOREST, M: MOUNTAIN, L: LIGHT_BROWN, D: DARK_BROWN}
+#  yhdistetään ruudut ja kuvat
+tile_colour = {W: pygame.image.load('water.jpg'),
+               G: pygame.image.load('grass.jpg'),
+               F: pygame.image.load('forest.jpg'),
+               M: pygame.image.load('mountain.jpg'),
+               L: pygame.image.load('drygrass.jpg'),
+               D: pygame.image.load('bridge.jpg')}
 
 # kartta, jossa kirjain vastaa 30x30 ruutua, jonka ympäristön määrittää Kijain
 game_map =[[G,G,G,G,G,G,G,G,F,F,F,F,G,G,G,W,G,G,W,G,G,G,M,M,M,W,G,G,G,G,G,G,G,W,W],
@@ -64,7 +61,7 @@ pygame.display.set_caption('The Epic Adventure of NomNom')
 playerX = 0
 playerY = 0
 #alussa pelaajan kuva on:
-playerImg = pygame.image.load('sheep1.png')
+playerImg = pygame.image.load('sheep.png')
 #jos kokemus yli XX xp niin pelaajan graafinen kuva on:
 playerImg2 = pygame.image.load('sheep2.png')
 #NomNomin sijainti kartalla/ ruudukossa
@@ -186,9 +183,6 @@ while True:
                     else:
                         nomnom.hp += 1
 
-
-
-
             if event.key == pygame.K_UP:
         # -------------------------------------------------------------------------------------------------
         # TÄMÄ OSIA OMAKSI FUNKTIOKSI (def move_up())
@@ -259,8 +253,7 @@ while True:
     for row in range(MAPHEIGHT):
         #  vaakarivit
         for column in range(MAPWIDTH):
-            pygame.draw.rect(DISPLAY, tile_colour[game_map[row][column]],(column*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
-
+            DISPLAY.blit(tile_colour[game_map[row][column]], (column * TILESIZE, row * TILESIZE))
     #DISPLAY.blit(playerImg, (playerX, playerY))
     nomnom.location((playerX,playerY))
 
