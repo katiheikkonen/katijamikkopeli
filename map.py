@@ -159,8 +159,8 @@ def game():
                 win()
 
     # Tarkistetaan osuuko pelaaja suteen:
-    def osuuko(wolf1X, wolf1Y, playerX, playerY):
-        distance = math.sqrt((math.pow(wolfs.wolf1X - playerX, 2)) + (math.pow(wolfs.wolf1Y - playerY, 2)))
+    def osuuko(x, y, playerX, playerY):
+        distance = math.sqrt((math.pow(x - playerX, 2)) + (math.pow(y - playerY, 2)))
         if distance < 20:
             return True
         else:
@@ -415,8 +415,4 @@ def game():
 
         pygame.display.update()
 
-
-
 main_menu()
-
-
